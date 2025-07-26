@@ -7,13 +7,13 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
 
-import com.juaracoding.ecom.utils.DriverUtils;
+import com.juaracoding.ecom.utils.DriverUtil;
 
 public class PreCondition {
   @BeforeMethod
   @Parameters({ "baseURL", "username", "password" })
   public void setup(String baseURL, String username, String password) throws InterruptedException {
-    WebDriver driver = DriverUtils.getDriver();
+    WebDriver driver = DriverUtil.getDriver();
 
     driver.get(baseURL);
 
@@ -34,6 +34,6 @@ public class PreCondition {
   @AfterSuite
   public void teardown() throws InterruptedException {
     Thread.sleep(2000);
-    DriverUtils.quitDriver();
+    DriverUtil.quitDriver();
   }
 }

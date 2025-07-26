@@ -40,12 +40,37 @@ Proyek ini merupakan otomatisasi pengujian untuk aplikasi web eCommerce mengguna
 - Validasi tampilan produk
 - Drag & drop dan resize elemen
 - Pengujian filter dan pencarian produk
+- **Add to Cart** (menambah produk ke keranjang dan validasi jumlah item)
 - Checkout dan pembayaran (dummy)
 - Validasi notifikasi dan error message
 
 ## Konfigurasi Test
 
 Edit file [src/test/resources/testng.xml](src/test/resources/testng.xml) untuk mengatur parameter test seperti username, password, dan baseURL.
+
+Untuk mengatur target environment (misal: staging, production), tambahkan parameter pada bagian `<suite>` di `testng.xml` seperti contoh berikut:
+
+```xml
+<suite name="Ecommerce Test Suite">
+  <parameter name="baseURL" value="https://staging.ecommerce.com"/>
+  <parameter name="username" value="testuser"/>
+  <parameter name="password" value="testpass"/>
+  <!-- Tambahkan parameter lain sesuai kebutuhan -->
+  ...
+</suite>
+```
+
+Kemudian, di kode Java Anda, gunakan annotation TestNG untuk mengambil parameter tersebut:
+
+```java
+@Parameters({"baseURL", "username", "password"})
+@BeforeClass
+public void setup(String baseURL, String username, String password) {
+    // Inisialisasi WebDriver dan login sesuai parameter
+}
+```
+
+Pastikan setiap perubahan pada `testng.xml` sesuai dengan environment dan kebutuhan pengujian Anda.
 
 ## Troubleshooting
 
@@ -75,4 +100,4 @@ Edit file [src/test/resources/testng.xml](src/test/resources/testng.xml) untuk m
 
 ## Lisensi
 
-Proyek ini menggunakan lisensi MIT.
+Proyek ini menggunakan lisensi

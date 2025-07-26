@@ -1,58 +1,28 @@
 package com.juaracoding.ecom;
 
-// 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.Select;
+import com.juaracoding.ecom.pages.InventoryPage;
+import com.juaracoding.ecom.utils.DriverUtil;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.juaracoding.ecom.repositories.InventoryRepository;
-import com.juaracoding.ecom.utils.DriverManager;
-import com.juaracoding.ecom.utils.LoginUtil;
+public class InventoryTest extends BaseTest {
 
-public class InventoryTest{
+    private InventoryPage inventoryPage;
 
-  @Test
-  public void productDisplayTest() throws InterruptedException {
-    DriverManager driverManager = new DriverManager();
-    WebDriver driver = driverManager.getDriver();
-    driver.get("https://www.saucedemo.com/v1/inventory.html");
-    LoginUtil.performLogin(driver);
+    @Test()
+    public void testAddItems() {
+        inventoryPage = new InventoryPage(DriverUtil.getDriver());
 
-    int expected = 6;
-    int actual = driver.findElements(InventoryRepository.inventoryItem).size();
+        int total = inventoryPage.getTotalProductDisplayed();
+        Assert.assertEquals(total, 6, "Jumlah produk tidak sesuai!");
 
-    Assert.assertEquals(actual, expected, "Jumlah produk tidak sesuai expektasi.");
-    driverManager.quitDriver();
-  }
+        inventoryPage.addItemToCart();
 
-  @Test
-  public void productSortFeatureTest() throws InterruptedException {
-    DriverManager driverManager = new DriverManager();
-    WebDriver driver = driverManager.getDriver();
-    LoginUtil.performLogin(driver);
-    Select select = new Select(driver.findElement(
-        InventoryRepository.productSortContainer));
+        String itemCount = inventoryPage.getCartItemCount();
+        Assert.assertEquals(itemCount, "1", "Jumlah item di cart tidak sesuai!");
 
-    select.selectByValue("az");
+        boolean removeButtonExists = inventoryPage.isRemoveButtonExists();
+        Assert.assertTrue(removeButtonExists, "Tombol Remove tidak ditemukan setelah add item!");
 
-    List<WebElement> items = driver.findElements(InventoryRepository.inventoryItemName);
-    List<String> actualTitles = new ArrayList<String>();
-
-    for (WebElement item : items) {
-      actualTitles.add(item.getText());
     }
-
-    List<String> expectedTitles = new ArrayList<String>(actualTitles);
-    Collections.sort(expectedTitles);
-
-    Assert.assertEquals(actualTitles, expectedTitles);
-
-  }
 }
